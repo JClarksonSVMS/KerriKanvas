@@ -22,10 +22,10 @@ $billing = $presets['billing']; // required
 $photo = $presets['photo']; // required
 $message = $presets['message'];
 $comment = $presets['comment'];
-$password = null;
-if (isset($presets['password'])) {
-    $password = password_hash($presets['password'], PASSWORD_DEFAULT);
-}
+$password = $presets['password'];
+//if (isset($presets['password'])) {
+//    $password = password_hash($presets['password'], PASSWORD_DEFAULT);
+//}
 
 if (!preg_match($string_exp, $first_name)) {
     $error_message[] = 'Please start with your first name.<br />';
@@ -80,18 +80,13 @@ if (isset($_POST['msg_send'])) {
     @mail($email_to, $email_subject, $email_message, $headers);
 
     require_once('Dao.php');
-    echo "connection ";
+//    echo "connection ";
     $dao = new Dao();
-    echo "new Dao ";
+//    echo "new Dao ";
     $dao->saveMessage($first_name, $last_name, $message, $email_from, $password);
-    echo "query ";
-    $_SESSION['error_messages'] = array("Your message has been posted");
-    $_SESSION['sentiment'] = 'good';
-    echo "session messages ";
         header("Location: contact.php");
-//    header("Location: http://cs516-401project.kerrikanvas.com/contact.php");
     echo "header ";
-    //exit;
+    exit;
     
     
 } elseif ($_POST['order']) {
@@ -188,8 +183,6 @@ if (isset($_POST['msg_send'])) {
 
     if (empty($error_message) == true) {
         move_uploaded_file($file_tmp, $path);
-        $_SESSION['error_messages'] = array("Your message has been posted");
-        $_SESSION['sentiment'] = 'good';
         header("Location: contact.php");
         exit;
     }

@@ -1,25 +1,14 @@
 <?php
 session_start();
-//echo print_r($_SESSION, 1);
 ?>
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Kerri's Kanvas</title>
-        <meta name="author" content="Jerry Clarkson" />
-        <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet"> 
-        <link href="style.php" rel="stylesheet">
-        <link href="header.css" rel="stylesheet">
-        <link rel="icon" href="images/KKIcon16.png" type="image/png" sizes="32x32">
-    </head>
+    <?php include 'head.php'; ?>
     <body class="order" onload="formreset()">
         <div class="bodyContainer">
             <div class="innerbody">
                 <input type="button" id="write" class="contactInput" value="Write a Message" onclick="showform(1)">
-                <!--onclick="showform(1)"-->
                 <input type="button" id="calculate" class="contactInput" value="Calculate a Painting Price" onclick="showform(2)">
                 <input type="button" id="order" class="contactInput" value="Order a Custom Painting" onclick="showform(3)">
                 <div class="orderForms">
@@ -105,19 +94,20 @@ session_start();
                             <p>
                                 Portrait pricing is based on the media - oil, acrylic, watercolor, or pencil - the portrait size, and the number of people in the portrait (a more detailed portrait). Use this calculator to estimate the cost of a portrait for your family or friends. Only large oil portraits will accomodate six or seven people.
                             </p>
+                            <a href="track_order.php"><input type="button"  class="contactInput"  id="trackButton" value="Track Your Orders"></a>
                         </div>
                         <div class="orderpart">
                             <div id="ordering">
                                 <p>Please enter your first and last name, email address, and password, choose a media, size, and number of figures as well as complete the information below to order.</p>
                                 <label id="address" for="address">Your Postal Address</label>
-                                <input type="text" name="address" id="address" placeholder="Your billing and shipping address..">
+                                <input type="text" name="address" id="address" placeholder="Your billing and shipping address.."  value="<?php echo $_SESSION['form_data']['address']; ?>">
                                 <label id="phone" for="telephone">Your Telephone Number</label>
-                                <input type="tel" name="telephone" id="telephone">
+                                <input type="tel" name="telephone" id="telephone" value="<?php echo $_SESSION['form_data']['telephone']; ?>">
                                 <label id="bill" for="billing">Your Billing Method</label>
-                                <input type="text" name="billing" id="billing" placeholder="A check, credit card, or direct deposit.">
+                                <input type="text" name="billing" id="billing" placeholder="A check, credit card, or direct deposit."  value="<?php echo $_SESSION['form_data']['billing']; ?>">
                                 <label id="photo" for="photo">Upload a Photo</label>
                                 <input type="hidden" name="MAX_FILE_SIZE" value="2097150s" />
-                                <input type="file" name="photo" id="photo">
+                                <input type="file" name="photo" id="photo" value="<?php echo $_SESSION['form_data']['photo']; ?>">
                                 <label id="bill" for="comment">Add any additional message or instructions.</label>
                                 <textarea name="comment" id="comment" placeholder="Your message or instructions"></textarea>
                                 <input type="submit" name="order" value="Order">

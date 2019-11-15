@@ -11,14 +11,13 @@ $username = $presets[username];
 $password = $presets[password];
 
 
-// $valid = $dao->isValidUser($username, $password);
 $valid = false;
 if ($username == "kerri.clarkson@gmail.com" && $password == "1357Snowy") {
     $valid = true;
 }
 $_SESSION = array();
 if ($valid) {
-    $_SESSION['logged_in'] = true;
+    $_SESSION['admin_logged_in'] = true;
     header("Location: artLogEntry.php");
     exit;
 } else {

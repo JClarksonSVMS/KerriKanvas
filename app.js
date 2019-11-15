@@ -110,11 +110,11 @@ function showsizes(optVal) {
     }
 }
 
-function formreset() {
-    document.getElementById('contactform').reset();
-    document.getElementById('pricing').reset();
-    document.getElementById('ordering').reset();
-}
+//function formreset() {
+//    document.getElementById('contactform').reset();
+//    document.getElementById('pricing').reset();
+//    document.getElementById('ordering').reset();
+//}
 
 function showform(formtype) {
     var contactform = document.getElementById("contactform");

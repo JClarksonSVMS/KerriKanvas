@@ -93,7 +93,4 @@ if (isset($presets['eid'])) {
     header("Location: contact.php");
     console . log("6");
     exit;
-//Check user name
-//Check user password
-//Register user w/w/o password
 }

@@ -1,8 +1,10 @@
 <?php
 session_start();
+ob_start();
+
 require_once('Dao.php');
 $dao = new Dao();
-$images = $dao->getImages();
+$messages = $dao->getMessages();
 ?>
 
 <!DOCTYPE html>
@@ -12,12 +14,15 @@ $images = $dao->getImages();
         <div class="bodyContainer">
             <div class="innerbody">
                 <?php
-                foreach ($images as $image) {
-                    if ($image["image_id"] % 2 != 0) {
-                        echo "<div class='slide'>\n<img src='" . $image["image"] . "'  alt='" . $image["alternate"] . "' />\n<p class='slidetext'>" . $image["entry"] . "</p>\n</div>\n";
-                    } else {
-                        echo "<div class='slide'>\n<p class='slidetext'>" . $image["entry"] . "</p>\n<img src='" . $image["image"] . "' alt='" . $image["alternate"] . "' />\n</div>\n";
-                    }
+                if ($_SESSION['admin_logged_in'] === true) {
+                foreach ($messages as $message) {
+                    $user_id = $message["user_id"];
+                    $user = $dao->UserDetails($user_id);
+                echo "<div class='slide'>\n<p class='msgDate'>" . $message["datetime"] . "</p>\n<p class='msgUser'>" . $user["firstname"] . " " . $user["lastname"] . ", " . $user["email"] .  "</p>\n<p class='msg'>" . $message["message"] . "</p>\n</div>\n";
+                }
+                } else {
+                header("Location: artLog.php");
+                exit;
                 }
                 ?>
             </div>
@@ -33,3 +38,4 @@ $images = $dao->getImages();
         document.getElementsByTagName('head')[0].appendChild(script);
     </script>
 </html>
+

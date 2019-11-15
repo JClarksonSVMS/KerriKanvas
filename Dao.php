@@ -61,12 +61,63 @@ class Dao {
         }
     }
 
+    public function getPassword($user_id) {
+        $conn = $this->getConnection();
+        try {
+            $q = $conn->prepare("SELECT password FROM user WHERE  user_id = :user_id");
+            $q->bindParam(":user_id", $user_id);
+            $q->execute();
+            $user = $q->fetch();
+            return $user['password'];
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    public function updateUserPwrd($user_id, $password) {
+        $enc_password = hash('sha256', $password);
+        $conn = $this->getConnection();
+        try {
+            $q = $conn->prepare("UPDATE user SET password = :password WHERE user_id = :user_id");
+            $q->bindParam(":password", $enc_password);
+            $q->bindParam(":user_id", $user_id);
+            $q->execute();
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    public function getEmail($user_id) {
+        $conn = $this->getConnection();
+        try {
+            $q = $conn->prepare("SELECT email FROM user WHERE  user_id = :user_id");
+            $q->bindParam(":user_id", $user_id);
+            $q->execute();
+            $user = $q->fetch();
+            return $user['email'];
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    public function updateUserEmail($user_id, $email) {
+        $conn = $this->getConnection();
+        try {
+            $q = $conn->prepare("UPDATE user SET email = :email WHERE user_id = :user_id");
+            $q->bindParam(":email", $email);
+            $q->bindParam(":user_id", $user_id);
+            $q->execute();
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
     public function getUserID($first_name, $last_name) {
         $conn = $this->getConnection();
         try {
             $q = $conn->prepare("SELECT user_id FROM user WHERE firstname=:firstname AND lastname=:lastname");
-            $q->bindParam("firstname", $first_name);
-            $q->bindParam("lastname", $last_name);
+            $q->bindParam(":firstname", $first_name);
+            $q->bindParam(":lastname", $last_name);
             $q->setFetchMode(PDO::FETCH_ASSOC);
             $q->execute();
             $result = $q->fetchColumn();
@@ -85,6 +136,14 @@ class Dao {
             if ($user_id < 1) {
                 $user_id = $this->newUser($first_name, $last_name, $email, $password);
             }
+            $pswrd = $this->getPassword($user_id);
+            if ($pswrd == "") {
+                $update = $this->updateUserPwrd($user_id, $password);
+            }
+            $eml = $this->getEmail($user_id);
+            if ($eml == "") {
+                $update = $this->updateUserEmail($user_id, $email);
+            }
             $datetime = date("Y-m-d H:i:s");
             $saveQuery = "INSERT INTO messages
                 (datetime, user_id, message)
@@ -94,9 +153,8 @@ class Dao {
             $q->bindParam(":datetime", $datetime);
             $q->bindParam(":user_id", $user_id);
             $q->bindParam(":message", $message);
-            $q->setFetchMode(PDO::FETCH_ASSOC);
             $q->execute();
-            $result = $q->fetchColumn();    
+            $result = $conn->lastInsertId();
             return $result;
         } catch (PDOException $e) {
             exit($e->getMessage());
@@ -110,6 +168,14 @@ class Dao {
             $user_id = $this->getUserID($first_name, $last_name);
             if ($user_id < 1) {
                 $user_id = $this->newUser($first_name, $last_name, $email_from, $password);
+            }
+            $pswrd = $this->getPassword($user_id);
+            if ($pswrd == "") {
+                $update = $this->updateUserPwrd($user_id, $password);
+            }
+            $eml = $this->getEmail($user_id);
+            if ($eml == "") {
+                $update = $this->updateUserEmail($user_id, $email);
             }
             $message_id = $this->saveMessage($first_name, $last_name, $message, $email_from, $password);
 
@@ -129,14 +195,14 @@ class Dao {
             $q->bindParam(":billing", $billing);
             $q->setFetchMode(PDO::FETCH_ASSOC);
             $q->execute();
-            $result = $q->fetchColumn();    
+            $result = $q->fetchColumn();
             return $result;
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     }
 
-    public function saveImageBlog($path, $img_alt, $imgText){
+    public function saveImageBlog($path, $img_alt, $imgText) {
         $conn = $this->getConnection();
 
         try {
@@ -153,7 +219,6 @@ class Dao {
             echo $e->getMessage();
         }
     }
-    
 
     public function isEmail($email) {
         try {
@@ -194,12 +259,10 @@ class Dao {
     public function UserDetails($user_id) {
         try {
             $conn = $this->getConnection();
-            $q = $conn->prepare("SELECT user_id, firstname, lastname, email FROM users WHERE user_id=:user_id");
-            $q->bindParam("user_id", $user_id, PDO::PARAM_STR);
+            $q = $conn->prepare("SELECT firstname, lastname, email FROM user WHERE user_id=:user_id");
+            $q->bindParam("user_id", $user_id);
             $q->execute();
-            if ($q->rowCount() > 0) {
-                return $q->fetch(PDO::FETCH_OBJ);
-            }
+            return $q->fetch();
         } catch (PDOException $e) {
             exit($e->getMessage());
         }
@@ -208,7 +271,7 @@ class Dao {
     public function getMessages() {
         $conn = $this->getConnection();
         try {
-            return $conn->query("select message_id, message, date_entered  from message order by date_entered desc", PDO::FETCH_ASSOC);
+            return $conn->query("select message_id,  datetime, user_id, message  from messages", PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             echo print_r($e, 1);
             exit;
@@ -225,7 +288,41 @@ class Dao {
 
     public function getImages() {
         $conn = $this->getConnection();
-        return $conn->query("SELECT image_id, image, alternate, entry FROM blog");
+        try {
+            return $conn->query("SELECT image_id, image, alternate, entry FROM blog", PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo print_r($e, 1);
+            exit;
+        }
+    }
+
+    public function getOrders($user_id) {
+        $conn = $this->getConnection();
+        try {
+            $ordersquery = "SELECT * FROM ordering where user_id = :user_id";
+            $q = $conn->prepare($ordersquery);
+            $q->bindParam(":user_id", $user_id);
+            $q->setFetchMode(PDO::FETCH_ASSOC);
+            $q->execute();
+            return $q->fetchAll();
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    public function getUserMessages($message_id) {
+        $conn = $this->getConnection();
+        try {
+            $messagequery = "SELECT message FROM messages where message_id = :message_id";
+            $q = $conn->prepare($messagequery);
+            $q->bindParam(":message_id", $message_id);
+            $q->setFetchMode(PDO::FETCH_ASSOC);
+            $q->execute();
+            $result = $q->fetch();
+            return $result;
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
     }
 
 }

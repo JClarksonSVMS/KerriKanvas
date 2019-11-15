@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Kerri's Kanvas</title>
-        <meta name="author" content="Jerry Clarkson" />
-        <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet"> 
-        <link href="style.css" rel="stylesheet">
-        <link href="header.css" rel="stylesheet">
-        <link rel="icon" href="images/KKIcon16.png" type="image/png" sizes="32x32"> 
-        <script src="app.js"></script>
-    </head>
+    <?php include 'head.php'; ?>
     <body class="index" onload="slideup()">
         <div class="bodyContainer">
             <!--<div id="demo">demo</div>--> 	
@@ -34,4 +24,10 @@
             <?php include 'footer.php'; ?>
         </div>
     </body>
+    <script>
+        var script = document.createElement('script');
+        script.src = 'app.js';
+        script.type = 'text/javascript';
+        document.getElementsByTagName('head')[0].appendChild(script);
+    </script>
 </html>

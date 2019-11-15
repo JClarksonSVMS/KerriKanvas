@@ -110,7 +110,7 @@ margin: 1% 1%;
 display:none;
 }
 
-#calcbutton{
+#calcbutton, #trackButton{
 width:100%;
 }
 
@@ -188,6 +188,28 @@ display: none;
 
 .summary:hover ul{
 display: block;
+}
+
+.msgDate, .msgUser{
+width:20%;
+float:left;
+}
+
+.msg{
+padding:0 2%;
+width:55%;
+float:left;
+}
+
+#track_login{
+width:33%;
+float:left;
+}
+
+.orders{
+padding-left: 2%;
+width:63%;
+float:right;
 }
 
 footer{

@@ -7,7 +7,7 @@ $error_message = array();
 $presets = $_POST;
 $sentiment = 'good';
 
-if ($_SESSION['logged_in'] === true) {
+if ($_SESSION['admin_logged_in'] === true) {
 
 //    if (isset($_FILES['photo'])) {
         $error_message = array();
