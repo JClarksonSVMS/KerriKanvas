@@ -7,6 +7,7 @@
         <link href="style.php" rel="stylesheet">
         <link href="header.css" rel="stylesheet">
         <link rel="icon" href="images/KKIcon16.png" type="image/png" sizes="32x32"> 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+        <script src="jquery-3.4.1.js"></script>
         <noscript><link href="noscript.css" rel="stylesheet"></noscript>
     </head>

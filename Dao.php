@@ -175,7 +175,7 @@ class Dao {
             }
             $eml = $this->getEmail($user_id);
             if ($eml == "") {
-                $update = $this->updateUserEmail($user_id, $email);
+                $update = $this->updateUserEmail($user_id, $email_from);
             }
             $message_id = $this->saveMessage($first_name, $last_name, $message, $email_from, $password);
 
