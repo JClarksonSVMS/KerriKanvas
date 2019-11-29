@@ -7,8 +7,8 @@ $error_message = array();
 $presets = $_POST;
 $sentiment = 'good';
 
-$username = $presets[username];
-$password = $presets[password];
+$username = $presets['username'];
+$password = $presets['password'];
 
 
 $valid = false;

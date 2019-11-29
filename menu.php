@@ -14,4 +14,5 @@
     </li>
     <li class="order">
         <a href="contact.php" class="order">Custom Art and Contact</a>
+    </li>
 </ul>

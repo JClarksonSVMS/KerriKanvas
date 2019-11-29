@@ -23,9 +23,11 @@ top:20vh;
 width: 90%;
 height: 75%;
 bottom: 60vh;
-overflow-y: auto;
+overflow-x:hidden;
 left: 5%;
 }
+
+.innerindex{overflow:hidden;}
 
 .center{
 text-align: center;
@@ -33,13 +35,13 @@ text-align: center;
 
 .slidea {
 position: absolute; 
-top: 10%; 
+top: 0%; 
 left: 20%; 
 width:70%;
 z-index: 5000;
 }
 
-.slideb, .slidec {
+.slideb {
 clear:both;
 position: absolute; 
 left: -5%;
@@ -52,6 +54,25 @@ z-index: 4000;
 img{
 border-radius: 5%; 
 box-shadow: 10px 10px 5px rgb(0, 0, 75);
+}
+
+.indx_slide{
+width:78%;
+}
+
+#imagesa, #imagesb{
+width:35%;
+clear:both;
+float:left; 
+margin-right:4%;
+margin-bottom:4%;
+}
+.img-slidea, .img-slideb{
+width:100%;
+}
+
+.indx_slide p{
+width:100%;
 }
 
 .slide{
@@ -98,6 +119,7 @@ background-color: rgb(0, 0, 175);
 color: white;
 border: none;
 border-radius: 4px;
+cursor:pointer;
 }
 
 .orderpart{
@@ -185,6 +207,30 @@ display: block;
 .oilsize, .watersize{
 display: none;
 }
+<?php
+if ($_SESSION['form_data']['mediatype'] == 'nosize') {
+    echo '.nosize{
+display: block;
+}
+.oilsize, .watersize{
+display: none;
+}';
+} elseif ($_SESSION['form_data']['mediatype'] == 'oil') {
+    echo '.oilsize{
+display: block;
+}
+.nosize, .watersize{
+display: none;
+}';
+} elseif ($_SESSION['form_data']['mediatype'] == 'water') {
+    echo '.watersize{
+display: block;
+}
+.nosize, .oilsize{
+display: none;
+}';
+}
+?>
 
 .summary:hover ul{
 display: block;
